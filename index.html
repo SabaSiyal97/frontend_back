@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindCare - AI Mental Health Support</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        .card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+        }
+        
+        .mood-option {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .mood-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .mood-option.selected {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.5));
+        }
+        
+        .progress-bar {
+            height: 0.5rem;
+            background-color: #e2e8f0;
+            border-radius: 0.25rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transition: width 0.5s ease;
+        }
+        
+        .tab {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .breathing-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            margin: 2rem auto;
+            /*animation: breathe 8s infinite ease-in-out;*/
+        }
+        
+        @keyframes breathe {
+            0%, 100% { transform: scale(0.9); }
+            50% { transform: scale(1.1); }
+        }
+        @keyframes breathe {
+  0%, 100% { transform: scale(0.9); }
+  50% { transform: scale(1.1); }
+}
+
+.animate-breathing {
+  animation: breathe 8s infinite ease-in-out;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-brain text-2xl"></i>
+                <span class="text-xl font-bold">MindCare</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#home" class="hover:text-gray-200">Home</a>
+                <a href="#assessment" class="hover:text-gray-200">Assessment</a>
+                <a href="#resources" class="hover:text-gray-200">Resources</a>
+                <a href="#tools" class="hover:text-gray-200">Tools</a>
+                <a href="#contact" class="hover:text-gray-200">Contact</a>
+            </div>
+            <button class="md:hidden text-2xl" id="menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="md:hidden hidden px-6 py-2" id="mobile-menu">
+            <a href="#home" class="block py-2 hover:text-gray-200">Home</a>
+            <a href="#assessment" class="block py-2 hover:text-gray-200">Assessment</a>
+            <a href="#resources" class="block py-2 hover:text-gray-200">Resources</a>
+            <a href="#tools" class="block py-2 hover:text-gray-200">Tools</a>
+            <a href="#contact" class="block py-2 hover:text-gray-200">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="gradient-bg text-white py-20">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">AI-Powered Mental Health Support</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Your personalized companion for mental wellbeing, powered by machine learning to understand and support your unique needs.</p>
+            <button class="btn-primary text-lg px-8 py-3" id="start-assessment">
+                Take Mental Health Assessment <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Assessment Section -->
+    <section id="assessment" class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Mental Health Assessment</h2>
+            
+            <div class="max-w-3xl mx-auto">
+                <!-- Progress Bar -->
+                <div class="mb-8">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-sm font-medium" id="progress-text">Question 1 of 10</span>
+                        <span class="text-sm font-medium" id="progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <!-- Assessment Questions -->
+                <div class="card p-8 mb-8" id="question-container">
+                    <div class="tab active" id="welcome-tab">
+                        <h3 class="text-2xl font-semibold mb-4">Welcome to Your Assessment</h3>
+                        <p class="mb-6">This questionnaire will help us understand your current mental state. There are no right or wrong answers - just be honest about how you've been feeling recently.</p>
+                        <p class="mb-8">The assessment takes about 5 minutes to complete. Your answers will help our AI system provide personalized recommendations.</p>
+                        <button class="btn-primary" id="start-btn">Begin Assessment</button>
+                    </div>
+                    
+                    <div class="tab" id="question-tab">
+                        <h3 class="text-2xl font-semibold mb-6" id="question-text"></h3>
+                        <div class="space-y-4" id="options-container"></div>
+                    </div>
+                    
+                    <div class="tab" id="results-tab">
+                        <h3 class="text-2xl font-semibold mb-6">Your Assessment Results</h3>
+                        <div class="mb-8">
+                            <div class="flex items-center mb-4">
+                                <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center text-white text-2xl mr-4" id="mood-icon">
+                                    <i class="fas fa-smile"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold" id="result-title">Overall Wellbeing</h4>
+                                    <p class="text-gray-600" id="result-subtitle">Based on your responses</p>
+                                </div>
+                            </div>
+                            <div class="bg-gray-100 p-4 rounded-lg">
+                                <p id="result-description">Our analysis suggests you're generally doing well, but could benefit from some self-care practices. Below are personalized recommendations based on your responses.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6 mb-8">
+                            <div class="card p-6">
+                                <h4 class="text-lg font-semibold mb-3">Stress Level</h4>
+                                <div class="flex items-center mb-2">
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-blue-600 h-2.5 rounded-full" id="stress-bar" style="width: 40%"></div>
+                                    </div>
+                                    <span class="ml-2 text-sm font-medium" id="stress-percent">40%</span>
+                                </div>
+                                <p class="text-sm text-gray-600">Moderate stress detected</p>
+                            </div>
+                            
+                            <div class="card p-6">
+                                <h4 class="text-lg font-semibold mb-3">Anxiety Level</h4>
+                                <div class="flex items-center mb-2">
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-purple-600 h-2.5 rounded-full" id="anxiety-bar" style="width: 30%"></div>
+                                    </div>
+                                    <span class="ml-2 text-sm font-medium" id="anxiety-percent">30%</span>
+                                </div>
+                                <p class="text-sm text-gray-600">Mild anxiety detected</p>
+                            </div>                   
+                            <div class="card p-6">
+                                <h4 class="text-lg font-semibold mb-3">Depression Level</h4>
+                                <div class="flex items-center mb-2">
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-pink-600 h-2.5 rounded-full" id="depression-bar" style="width: 20%"></div>
+                                    </div>
+                                    <span class="ml-2 text-sm font-medium" id="depression-percent">20%</span>
+                                </div>
+                                <p class="text-sm text-gray-600">Low depression detected</p>
+                            </div>
+                            
+                            <div class="card p-6">
+                                <h4 class="text-lg font-semibold mb-3">Sleep Quality</h4>
+                                <div class="flex items-center mb-2">
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-indigo-600 h-2.5 rounded-full" id="sleep-bar" style="width: 60%"></div>
+                                    </div>
+                                    <span class="ml-2 text-sm font-medium" id="sleep-percent">60%</span>
+                                </div>
+                                <p class="text-sm text-gray-600">Moderate sleep quality</p>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary" id="view-recommendations">View Recommendations</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section id="resources" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Personalized Resources</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card p-6">
+                    <div class="text-4xl text-purple-600 mb-4">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Educational Articles</h3>
+                    <p class="text-gray-600 mb-4">Learn about mental health conditions, coping strategies, and self-improvement techniques.</p>
+                    <button class="btn-primary">Browse Articles</button>
+                </div>
+                
+                <div class="card p-6">
+                    <div class="text-4xl text-blue-600 mb-4">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Guided Meditations</h3>
+                    <p class="text-gray-600 mb-4">Audio sessions for stress relief, anxiety reduction, and better sleep.</p>
+                    <button class="btn-primary" onclick="window.open('/meditation', '_blank')">Listen Now</button>
+
+
+                </div>
+
+                <div class="card p-6">
+                    <div class="text-4xl text-pink-600 mb-4">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Quranic Support</h3>
+                    <p class="text-gray-600 mb-4">Here are some Quranic Verses to support you.</p>
+                    <button class="btn-primary">Find Help</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Self-Care Tools Section -->
+    <section id="tools" class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Self-Care Tools</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Breathing Exercise -->
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-4">Breathing Exercise</h3>
+                    <p class="text-gray-600 mb-6">This simple breathing technique can help reduce stress and anxiety.</p>
+                    
+                    <div class="breathing-circle flex items-center justify-center text-white text-xl font-bold" id="breath-circle">
+                        Breathe In
+                    </div>
+                    
+                    <div class="flex justify-center mt-6">
+                        <button class="btn-primary" id="start-breathing">Start Exercise</button>
+                    </div>
+                </div>
+                
+                <!-- Mood Tracker -->
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-4">Daily Mood Tracker</h3>
+                    <p class="text-gray-600 mb-6">Track your mood over time to identify patterns and triggers.</p>
+                    
+                    <div class="flex justify-around mb-6">
+                        <div class="mood-option text-4xl" data-mood="1">
+                            <i class="fas fa-sad-tear text-blue-500"></i>
+                        </div>
+                        <div class="mood-option text-4xl" data-mood="2">
+                            <i class="fas fa-frown text-blue-400"></i>
+                        </div>
+                        <div class="mood-option text-4xl" data-mood="3">
+                            <i class="fas fa-meh text-gray-500"></i>
+                        </div>
+                        <div class="mood-option text-4xl" data-mood="4">
+                            <i class="fas fa-smile text-yellow-500"></i>
+                        </div>
+                        <div class="mood-option text-4xl" data-mood="5">
+                            <i class="fas fa-laugh text-green-500"></i>
+                        </div>
+                    </div>
+                    
+                    <textarea class="w-full p-3 border rounded-lg mb-4" placeholder="Add notes about your day (optional)"></textarea>
+                    <button class="btn-primary w-full">Save Mood Entry</button>
+                </div>
+                
+                <!-- Gratitude Journal -->
+                <div class="card p-6 md:col-span-2">
+                    <h3 class="text-xl font-semibold mb-4">Gratitude Journal</h3>
+                    <p class="text-gray-600 mb-6">Practicing gratitude daily can improve your mental wellbeing.</p>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Today I'm grateful for:</label>
+                        <input type="text" class="journal-entry w-full p-3 border rounded-lg mb-2" placeholder="First thing">
+                        <input type="text" class="journal-entry w-full p-3 border rounded-lg mb-2" placeholder="Second thing">
+                        <input type="text" class="journal-entry w-full p-3 border rounded-lg" placeholder="Third thing">
+
+                    </div>
+                    
+                    <button class="btn-primary" id="save-journal">Save Journal Entry</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="toast" class="hidden fixed top-6 right-6 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-opacity duration-300">
+  Journal entry saved successfully!
+</div>
+
+
+    <section id="chatbot" class="py-16 bg-gray-100">
+  <div class="container mx-auto px-6 max-w-2xl">
+    <h2 class="text-3xl font-bold text-center mb-6">Talk to MindCare Chatbot</h2>
+    <div class="card p-4 h-[400px] overflow-y-auto mb-4" id="chat-box"></div>
+    <form id="chat-form" class="flex gap-2">
+      <input type="text" id="user-input" class="w-full p-2 rounded-lg border" placeholder="Type how you're feeling..." />
+      <button type="submit" class="btn-primary px-4 py-2">Send</button>
+    </form>
+  </div>
+</section>
+
+<script>
+  const chatForm = document.getElementById('chat-form');
+  const chatBox = document.getElementById('chat-box');
+
+  chatForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const input = document.getElementById('user-input');
+    const userText = input.value;
+    input.value = '';
+
+    chatBox.innerHTML += `<div class="mb-2"><strong>You:</strong> ${userText}</div>`;
+
+    const response = await fetch('/chatbot', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: userText })
+    });
+
+    const data = await response.json();
+    chatBox.innerHTML += `<div class="mb-2"><strong>MindCare:</strong> ${data.reply}</div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+</script>
+
+<script>
+  const questions = [
+    "Have you been feeling nervous or anxious lately?",
+    "Do you often worry about things more than you should?",
+    "Have you felt stressed or overwhelmed in the past few days?",
+    "Do you find it hard to calm yourself when you're upset?",
+    "Have you been having trouble sleeping or relaxing?",
+    "Do you get irritated or annoyed easily?",
+    "Have you been feeling sad or down recently?",
+    "Do you feel like you're not enjoying things as much as you used to?",
+    "Have you had difficulty focusing or getting things done?",
+    "Do you feel tired even after resting?"
+  ];
+
+  const options = [
+    { text: "Never", value: 0 },
+    { text: "Sometimes", value: 1 },
+    { text: "Often", value: 2 },
+    { text: "Always", value: 3 }
+  ];
+
+  const startBtn = document.getElementById("start-btn");
+  const questionTab = document.getElementById("question-tab");
+  const welcomeTab = document.getElementById("welcome-tab");
+  const resultsTab = document.getElementById("results-tab");
+  const questionText = document.getElementById("question-text");
+  const optionsContainer = document.getElementById("options-container");
+  const progressText = document.getElementById("progress-text");
+  const progressFill = document.getElementById("progress-fill");
+  const progressPercent = document.getElementById("progress-percent");
+
+  let currentQuestion = 0;
+  let answers = [];
+
+  startBtn.addEventListener("click", () => {
+    welcomeTab.classList.remove("active");
+    questionTab.classList.add("active");
+    showQuestion();
+  });
+
+  function showQuestion() {
+    questionText.innerText = questions[currentQuestion];
+    optionsContainer.innerHTML = "";
+
+    options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.className = "btn-primary block w-full text-left px-4 py-2 mb-2";
+      btn.innerText = opt.text;
+      btn.onclick = () => {
+        answers.push(opt.value);
+        currentQuestion++;
+        updateProgress();
+        if (currentQuestion < questions.length) {
+          showQuestion();
+        } else {
+          sendAnswers();
+        }
+      };
+      optionsContainer.appendChild(btn);
+    });
+  }
+
+  function updateProgress() {
+    const percent = Math.round((currentQuestion / questions.length) * 100);
+    progressText.innerText = `Question ${Math.min(currentQuestion + 1, 10)} of 10`;
+    progressFill.style.width = percent + "%";
+    progressPercent.innerText = percent + "%";
+  }
+
+  function sendAnswers() {
+    fetch("/predict", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ answers })
+    })
+    .then(res => res.json())
+    .then(data => {
+      questionTab.classList.remove("active");
+      resultsTab.classList.add("active");
+
+      // Update bars and text
+      document.getElementById("anxiety-bar").style.width = `${data.anxiety * 20}%`;
+      document.getElementById("anxiety-percent").innerText = `${data.anxiety * 20}%`;
+
+      document.getElementById("depression-bar").style.width = `${data.depression * 20}%`;
+      document.getElementById("depression-percent").innerText = `${data.depression * 20}%`;
+
+      document.getElementById("stress-bar").style.width = `${data.stress * 20}%`;
+      document.getElementById("stress-percent").innerText = `${data.stress * 20}%`;
+    })
+    .catch(err => {
+      alert("Something went wrong while submitting your answers.");
+      console.error(err);
+    });
+  }
+</script>
+
+<script>
+document.getElementById("save-journal").addEventListener("click", async () => {
+  const entries = Array.from(document.querySelectorAll(".journal-entry"))
+    .map(el => el.value.trim())
+    .filter(val => val !== "");
+
+  if (entries.length === 0) {
+    alert("⚠️ Please write at least one journal entry.");
+    return;
+  }
+
+  try {
+    const res = await fetch("/save_journal", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ journal: entries })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert(data.message); // ✅ success message
+    } else {
+      alert("❌ " + data.message);
+    }
+  } catch (err) {
+    console.error(err);
+    alert("❌ Network or server error occurred.");
+  }
+});
+</script>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 gradient-bg text-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">Need Help?</h2>
+            
+        </div>
+    </section>
+<script>
+  const breathCircle = document.getElementById('breath-circle');
+  const startBreathingBtn = document.getElementById('start-breathing');
+  let breathingInterval;
+
+  const steps = [
+    { text: "Breathe In", duration: 4000 },
+    { text: "Hold", duration: 4000 },
+    { text: "Breathe Out", duration: 4000 },
+    { text: "Hold", duration: 4000 }
+  ];
+
+  function startBreathing() {
+    breathCircle.classList.add("animate-breathing"); // Apply animation
+    let step = 0;
+
+    function runStep() {
+      const current = steps[step];
+      breathCircle.innerText = current.text;
+      step = (step + 1) % steps.length;
+      breathingInterval = setTimeout(runStep, current.duration);
+    }
+
+    runStep();
+  }
+
+  startBreathingBtn.addEventListener("click", () => {
+    clearTimeout(breathingInterval); // Stop any previous loop
+    startBreathing();
+  });
+</script>
+
+<script>
+  function showMeditationPlayer() {
+    document.getElementById("meditation-player").classList.remove("hidden");
+  }
+
+  function playTrack(src) {
+    const player = document.getElementById("audio-player");
+    player.src = src;
+    player.play();
+  }
+</script>
+<!-- Meditation Modal -->
+
+<script>
+  function openMeditationModal() {
+    document.getElementById("meditationModal").classList.remove("hidden");
+    document.getElementById("meditationModal").classList.add("flex");
+  }
+
+  function closeMeditationModal() {
+    document.getElementById("meditationModal").classList.remove("flex");
+    document.getElementById("meditationModal").classList.add("hidden");
+
+    // Optional: Pause the audio when modal closes
+    document.getElementById("audio-player").pause();
+  }
+
+  function playTrack(src) {
+    const player = document.getElementById("audio-player");
+    player.src = src;
+    player.play();
+  }
+</script>
+
+</body>
+</html>
