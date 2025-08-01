@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quranic Support - MindCare</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background: url('https://img.freepik.com/free-vector/mandala-background-design_53876-95093.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .ayah {
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-align: center;
+    }
+    .tafsir {
+      font-size: 1rem;
+      margin-top: 1rem;
+      color: #334155;
+    }
+  </style>
+</head>
+<body class="text-gray-800">
+
+  <div class="min-h-screen flex flex-col justify-center items-center p-4">
+    <div class="glass max-w-2xl w-full text-center">
+      <h1 class="text-3xl font-bold mb-4 text-purple-700">Quranic Support</h1>
+
+      <div class="ayah" id="ayah-text"></div>
+      <div class="tafsir mt-4" id="ayah-tafsir"></div>
+
+      <div class="flex justify-between mt-6">
+        <button onclick="prevAyah()" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+          <i class="fas fa-arrow-left"></i> Previous
+        </button>
+        <button onclick="bookmarkAyah()" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">
+          <i class="fas fa-bookmark"></i> Bookmark
+        </button>
+        <button onclick="nextAyah()" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+          Next <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <div class="mt-6">
+        <h3 class="text-lg font-semibold mb-2">📌 Bookmarked Ayahs:</h3>
+        <ul id="bookmarked" class="text-sm text-left text-gray-700 list-disc list-inside"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ayahs = [
+      {
+        text: "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+        tafsir: "Indeed, with hardship comes ease. (Surah Ash-Sharh 94:6)"
+      },
+      {
+        text: "وَاصْبِرْ وَمَا صَبْرُكَ إِلَّا بِاللَّهِ",
+        tafsir: "Be patient, and your patience is only through Allah. (Surah An-Nahl 16:127)"
+      },
+      {
+        text: "وَهُوَ مَعَكُمْ أَيْنَ مَا كُنتُمْ",
+        tafsir: "And He is with you wherever you are. (Surah Al-Hadid 57:4)"
+      },
+      {
+        text: "إِنَّ اللَّهَ يُحِبُّ الْمُتَوَكِّلِينَ",
+        tafsir: "Indeed, Allah loves those who rely upon Him. (Surah Al-Imran 3:159)"
+      },
+      {
+        text: "وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ",
+        tafsir: "My success is only by Allah. (Surah Hud 11:88)"
+      }
+    ];
+
+    let current = 0;
+    const ayahText = document.getElementById("ayah-text");
+    const ayahTafsir = document.getElementById("ayah-tafsir");
+    const bookmarkedList = document.getElementById("bookmarked");
+
+    function showAyah(index) {
+      const ayah = ayahs[index];
+      ayahText.innerText = ayah.text;
+      ayahTafsir.innerText = ayah.tafsir;
+    }
+
+    function nextAyah() {
+      current = (current + 1) % ayahs.length;
+      showAyah(current);
+    }
+
+    function prevAyah() {
+      current = (current - 1 + ayahs.length) % ayahs.length;
+      showAyah(current);
+    }
+
+    function bookmarkAyah() {
+      const li = document.createElement("li");
+      li.textContent = `${ayahs[current].text} - ${ayahs[current].tafsir}`;
+      bookmarkedList.appendChild(li);
+    }
+
+    // Initial display
+    showAyah(current);
+  </script>
+</body>
+</html>

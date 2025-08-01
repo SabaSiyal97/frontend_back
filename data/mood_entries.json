@@ -1,0 +1,17 @@
+[
+  {
+    "mood": "3",
+    "note": "hello",
+    "timestamp": "2025-07-16 23:41:43"
+  },
+  {
+    "mood": "1",
+    "note": "sad",
+    "timestamp": "2025-07-16 23:41:18"
+  },
+  {
+    "mood": "5",
+    "note": "happy",
+    "timestamp": "2025-07-14 00:11:51"
+  }
+]

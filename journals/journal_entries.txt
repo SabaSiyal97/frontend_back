@@ -1,0 +1,8 @@
+["food", "water", "food"]
+["food", "good  health", "water"]
+["food", "water", "money"]
+["food", "water", "food"]
+["food", "water", "food"]
+["food", "water", "food"]
+["food", "water", "food"]
+["home", "food", "water"]
